@@ -1,6 +1,10 @@
 #include <stdio.h>
 
 #define isYunnyun(x)    ((x%4==0 && x%100!=0) || x%400==0)
+#define DAYS_OF_YEAR    365
+#define DAYS_OF_YUNDAL  29
+#define DAYS_OF_WEEK    7
+#define MAX_CAL_ROW     6
 
 int main() 
 {
@@ -21,29 +25,27 @@ int main()
   // 따라서, 7로 나누어 나머지가 0이면 일요일이고, 나머지가 1부터 월요일 ~ 나머지가 6은 토요일
   // 
 
-  // 총 날짜 
+  // 총 날짜 계산
   int days = 0; 
-
   for(int i=1; i<=year-1; i++) {
-    days += isYunnyun(i) ? 366 : 365;
+    days += isYunnyun(i) ? DAYS_OF_YEAR+1 : DAYS_OF_YEAR; // 윤년이면 366, 일반년도이면 365씩 누적
   }
  
   if isYunnyun(year)
-    day[1] = 29;   
+    day[1] = DAYS_OF_YUNDAL;   
   
   for(int i=0; i<month-1; i++) {
     days += day[i];
   }
-  
 
   // 달력은 맥시멈 6행, 7열 
   // 0열이 일요일임, 
-  int start_dow = days%7 + 1;     // 전달 마지막 요일 + 1 요일에서 시작
+  int start_dow = days%DAYS_OF_WEEK + 1;     // 전달 마지막 요일 + 1 요일에서 시작
   int end_day = day[month-1];     // 그달의 마지막 일자를 배열에서 구함
   int dom = 1;                    // 1로 그달의 표시할 날짜 초기화
-  int arrCalendar[6][7] = {0};    // 달력을 표시할 2차원 배열
-  for(int i=0; i<6; i++){
-    for(int j=start_dow; j<7; j++) {
+  int arrCalendar[MAX_CAL_ROW][DAYS_OF_WEEK] = {0};    // 달력을 표시할 2차원 배열
+  for(int i=0; i<MAX_CAL_ROW; i++){
+    for(int j=start_dow; j<DAYS_OF_WEEK; j++) {
       if ( dom > end_day ) break; // 표시할 날짜가 마지막 날짜보다 커졌으면 루프 탈출
       arrCalendar[i][j] = dom++;  // 달력 행열(2차원 배열)에 날짜 추가      
     }
@@ -54,8 +56,8 @@ int main()
   printf("====================================================\n");
   // 2차원 배열을 다시 돌면서 2차원 배열에 저장된 내용을 그대로 출력해줌
   // 단 0이 저장된 공간에는 0을 출력하지 않음
-  for(int i=0; i<6; i++){
-    for(int j=start_dow; j<7; j++) {
+  for(int i=0; i<MAX_CAL_ROW; i++){
+    for(int j=start_dow; j<DAYS_OF_WEEK; j++) {
       if ( arrCalendar[i][j]==0 )   
         printf("\t");                       // 0이 저장된 공간에는 출력하지 않고 다음칸으로 넘어감
       else  
