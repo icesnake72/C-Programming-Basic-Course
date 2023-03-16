@@ -104,8 +104,6 @@ double divideEx(double div, double fact, int place=2)
 }
 
 
-
-
 int main() 
 {
   printHello();
