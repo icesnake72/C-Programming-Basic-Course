@@ -1,3 +1,13 @@
+/*
+func01.c
+coded by k.e.b
+
+함수를 이용하지 않고 로또 시뮬레이터를 코딩해봅니다.
+그리고 함수를 만들어 버전을 개선시킵니다.
+포인터 변수를 갖는 파라미터에 대해 알아봅니다.
+Call by Value 와 Call by Reference에 대해 알아봅니다.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
