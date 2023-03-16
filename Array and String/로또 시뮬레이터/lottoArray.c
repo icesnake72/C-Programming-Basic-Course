@@ -156,6 +156,8 @@ int main()
 
   // 구매자 로또 번호와 당첨번호를 맞춰본다
   // 여기에서 각 라인에 몇개가 맞았는지 여부를 체크하고 출력한다.
+  byte count = 0;
+  const char *strInfo = NULL;
   printf("구매자 로또 번호\n");
   printf("=========================\n");  
   for(byte i=0; i<5; i++)
@@ -163,9 +165,42 @@ int main()
     for(byte j=0; j<LOTTO_COUNT; j++)
     {
       printf("%2d, ", arrLotto[i][j]);
+      for(byte k=0; k<6; k++)
+      {
+        if (arrLotto[i][j]==arrWins[k])
+        {
+          count++;
+          break;
+        }          
+      }      
     }
 
+    switch(count)
+    {
+    case 0:
+    case 1:
+    case 2: 
+      strInfo = "꽝";
+      break;
+    case 3:
+      strInfo = "4등";
+      break;
+    case 4:
+      strInfo = "3등";
+      break;
+    case 5:
+      strInfo = "2등";
+      break;
+    case 6:
+      strInfo = "1등";    
+    }
+
+    printf(" <=== %s", strInfo);
+    if ( count < 3)
+      printf("(%d)", count);
+    
     printf("\n");
+    count = 0;
   }
   
   
