@@ -155,7 +155,6 @@ int main()
       printf("%2d, ", arrLotto[i][j]);
     }
 
-
     printf("\n");
   }
   
