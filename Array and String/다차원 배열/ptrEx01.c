@@ -9,6 +9,10 @@ coded by k.e.b
 단일 루프로 포인터 인덱싱을 이용해 배열내의 모든 데이터를 출력해 봅니다.
 
 배열과 포인터의 관계에 대해 알아봅니다.
+
+https://www.miricanvas.com/v/11utxzo
+https://www.miricanvas.com/v/11utxzo
+
 */
 
 #include <stdio.h>
@@ -161,6 +165,22 @@ int main()
   {
     printf("%d, ", *(**dim3+i));
   }
+
+  printf("\n");
+  printf("\n");
+  printf("\n");
+
+  char a = 10;
+  char b = 0;
+  char *p = &b; // pointer 변수는 데이터 타입을 막론하고, 32bit OS에서는 4byte, 64bit OS에서는 8 byte의 값을 갖는다.
+  *p = a;
+  *(&a) = 0;
+  printf("b=%d\n", b);
+  printf("a=%d\n", a);
+
+  printf("sizeof(a)=%lu\n", sizeof(a));
+  printf("sizeof(b)=%lu\n", sizeof(b));
+  printf("sizeof(p)=%lu\n", sizeof(p));
         
   return 0;
 }
