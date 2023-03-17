@@ -1,3 +1,8 @@
+// |Great! How can I assist you with your C coding needs?
+
+#include <stdio.h>
+
+
 /*
 func01.c
 coded by k.e.b
@@ -45,15 +50,125 @@ typedef unsigned char byte;
 15, 19, 31, 32, 42, 44, <=== 꽝(1)
 */
 
+byte* func1()
+{
+  byte arrWins[LOTTO_COUNT] = {0}; // 배열을 0으로 초기화한다.
+  byte i = 0;
+  byte tmp = 0;
+  byte existValue = 0;
+  while (i < LOTTO_COUNT)
+  {
+    tmp = rand() % MAX_LOTTO_VALUE + 1;
+    for (byte j = 0; j < i; j++)
+    {
+      // 이미 배열안에 같은 값이 존재한다면 입력하면 안된다.
+      if (arrWins[j] == tmp)
+      {
+        existValue = 1; // 지금 생성한 랜덤값이 배열에 존재한다고 플래그 변수에 체크한다.
+        break;
+      }
+    }
+
+    // 플래그 변수: existValue의 값이 0이면 배열에 현재 생성한 랜덤값이 존재하지 않으므로
+    // 배열에 현재 생성한 랜덤값을 저장한다.
+    if (!existValue)
+    {
+      arrWins[i] = tmp;
+      ++i;
+    }
+    // 다시 플래그 변수를 0으로 초기화한다.
+    existValue = 0;
+  }
+
+  for(int i=0; i<LOTTO_COUNT; i++)
+  {
+    printf("%d,", arrWins[i]);
+  }
+  printf("\n");
+
+  // arrWins == &arrWins[0]~[5] : 
+  return arrWins;
+}
+
+// stack memory Area : 일반적인 로컬 변수가 할당받을 수 있는 메모리 공간
+int someFunction(int n)
+{
+  // a는 지역변수(Local Variable) 입니다.
+  int a = n + 5;
+
+  for(int i=0; i<10; i++)
+  {    
+    printf("\n");
+  }
+
+  {
+    int i=0;
+    while(i<10)
+    {      
+      printf("\n");
+      i++;
+    }    
+  }
+
+  {
+    int i=0;
+    while(i<10)
+    {
+      printf("\n");
+      i++;
+    }
+  }
+    
+  return a;
+}
+
+int *someFunction2()
+{
+  int a = 10;
+  int *p = &a;
+
+  return p;
+}
+
+
+
+// Heap Memory Area : 사용자(프로그래머)가 관리하는 메모리 공간
+// Code Memory Area : 우리가 개발한 코드(기계어)가 올라가는 공간
+// Data Memory Area : 전역변수나 static 변수가 할당받는 공간
+
+
+
+
 int main()
 {
   srand((unsigned int)time(NULL));
+
+  printf("%d\n", someFunction(3));
+
+  printf("%d\n", *someFunction2());
+  printf("%d\n", *someFunction2());
+  printf("%d\n", *someFunction2());
+
+  int *ptr = someFunction2();
+  printf("%d\n", *ptr);
+  printf("%d\n", 100000);
+  printf("==================\n");
+  printf("%d\n", *ptr);
+
 
   // int n = rand();       // 랜덤값을 생성해주는 함수, 반드시 srand()를 이용하여 초기화해주어야 한다.
   // printf("n=%d\n", n);
 
   // 1부터 45까지의 랜덤한 값을 생성하여, arrWins에 저장한다.
   byte arrWins[LOTTO_COUNT] = {0}; // 배열을 0으로 초기화한다.
+  byte *pWins = func1();
+  for(int i=0; i<LOTTO_COUNT; i++)
+  {
+    printf("%d,", pWins[i]);
+  }
+
+  printf("\n");
+
   byte i = 0;
   byte tmp = 0;
   byte existValue = 0;
