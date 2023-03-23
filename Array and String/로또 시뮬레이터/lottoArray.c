@@ -45,141 +45,66 @@ typedef unsigned char byte;
 15, 19, 31, 32, 42, 44, <=== 꽝(1)
 */
 
+
+void initLotto(byte *arr, int nSize);
+void sortArray(byte *arr, int nSize);
+void swap(byte *a, byte *b);
+
+byte findInArray(byte *arr, int nSize, byte toFind);
+
 int main()
 {
   srand((unsigned int)time(NULL));
 
-  // int n = rand();       // 랜덤값을 생성해주는 함수, 반드시 srand()를 이용하여 초기화해주어야 한다.
-  // printf("n=%d\n", n);
-
   // 1부터 45까지의 랜덤한 값을 생성하여, arrWins에 저장한다.
   byte arrWins[LOTTO_COUNT] = {0}; // 배열을 0으로 초기화한다.
-  byte i = 0;
-  byte tmp = 0;
-  byte existValue = 0;
-  while (i < LOTTO_COUNT)
-  {
-    tmp = rand() % MAX_LOTTO_VALUE + 1;
-    for (byte j = 0; j < i; j++)
-    {
-      // 이미 배열안에 같은 값이 존재한다면 입력하면 안된다.
-      if (arrWins[j] == tmp)
-      {
-        existValue = 1; // 지금 생성한 랜덤값이 배열에 존재한다고 플래그 변수에 체크한다.
-        break;
-      }
-    }
-
-    // 플래그 변수: existValue의 값이 0이면 배열에 현재 생성한 랜덤값이 존재하지 않으므로
-    // 배열에 현재 생성한 랜덤값을 저장한다.
-    if (!existValue)
-    {
-      arrWins[i] = tmp;
-      ++i;
-    }
-    // 다시 플래그 변수를 0으로 초기화한다.
-    existValue = 0;
-  }
-
+  initLotto(arrWins, LOTTO_COUNT);
+  
   // 가장 기본적인 Sequential Sort Algorithm을 이용해 Ascending Sort를 한다.
-  for (byte i = 0; i < LOTTO_COUNT - 1; i++)
-  {
-    for (byte j = i + 1; j < LOTTO_COUNT; j++)
-    {
-      if (arrWins[i] > arrWins[j])
-      {
-        tmp = arrWins[j];
-        arrWins[j] = arrWins[i];
-        arrWins[i] = tmp;
-      }
-    }
-  }
+  sortArray(arrWins, LOTTO_COUNT);
 
+  // 시뮬레이션을 위해 구매자 로또 번호를 자동으로 생성한다.
+  byte arrLotto[5][LOTTO_COUNT] = {0};
+
+  for (byte k = 0; k < 5; k++)
+    initLotto(arrLotto[k], LOTTO_COUNT);
+
+  // sort
+  for (byte k = 0; k < 5; k++)
+    sortArray(arrLotto[k], LOTTO_COUNT);
+    
   printf("로또 당첨 번호\n");
   printf("=========================\n");
   for (byte i = 0; i < LOTTO_COUNT; i++)
     printf("%2d, ", arrWins[i]);
 
-  printf("\n=========================\n");
-
-  // 시뮬레이션을 위해 구매자 로또 번호를 자동으로 생성한다.
-  byte arrLotto[5][LOTTO_COUNT] = {0};
-  for (byte k = 0; k < 5; k++)
-  {
-    existValue = 0;
-    i = 0;
-    while (i < LOTTO_COUNT)
-    {
-      tmp = rand() % MAX_LOTTO_VALUE + 1;
-      for (byte j = 0; j < i; j++)
-      {
-        // 이미 배열안에 같은 값이 존재한다면 입력하면 안된다.
-        if (arrLotto[k][j] == tmp)
-        {
-          existValue = 1; // 지금 생성한 랜덤값이 배열에 존재한다고 플래그 변수에 체크한다.
-          break;
-        }
-      }
-
-      // 플래그 변수: existValue의 값이 0이면 배열에 현재 생성한 랜덤값이 존재하지 않으므로
-      // 배열에 현재 생성한 랜덤값을 저장한다.
-      if (!existValue)
-      {
-        arrLotto[k][i] = tmp;
-        ++i;
-      }
-      // 다시 플래그 변수를 0으로 초기화한다.
-      existValue = 0;
-    }
-  }
-
-  // sort
-  for (byte k = 0; k < 5; k++)
-  {
-    for (byte i = 0; i < LOTTO_COUNT - 1; i++)
-    {
-      for (byte j = i + 1; j < LOTTO_COUNT; j++)
-      {
-        if (arrLotto[k][i] > arrLotto[k][j])
-        {
-          tmp = arrLotto[k][j];
-          arrLotto[k][j] = arrLotto[k][i];
-          arrLotto[k][i] = tmp;
-        }
-      }
-    }
-  }
-
   // 구매자 로또 번호와 당첨번호를 맞춰본다
   // 여기에서 각 라인에 몇개가 맞았는지 여부를 체크하고 출력한다.
-
   // byte 타입의 변수 count를 0으로 초기화
   byte count = 0;
-  // 문자열 포인터 strInfo를 NULL로 초기화
+  byte existValue = 0;
   const char *strInfo = NULL;
+
   // "구매자 로또 번호" 출력
-  printf("구매자 로또 번호\n");
-  // "=========================" 출력
+  printf("\n=========================\n");  
+  printf("구매자 로또 번호\n");  
   printf("=========================\n");
   // 5번 반복하는 for 루프
   for (byte i = 0; i < 5; i++)
-  {
+  {    
     // LOTTO_COUNT(6)번 반복하는 for 루프
     for (byte j = 0; j < LOTTO_COUNT; j++)
     {
       // arrLotto[i][j] 출력
       printf("%2d, ", arrLotto[i][j]);
-      // 6번 반복하는 for 루프
-      for (byte k = 0; k < 6; k++)
+      existValue = 0;
+      existValue = findInArray(arrWins, LOTTO_COUNT, arrLotto[i][j]);
+      if ( existValue )
       {
-        // arrLotto[i][j]와 arrWins[k]가 같으면
-        if (arrLotto[i][j] == arrWins[k])
-        {
-          // count를 1 증가시키고 for 루프 탈출
-          count++;
-          break;
-        }
-      }
+        // count를 1 증가시키고 for 루프 탈출
+        count++;
+        break;
+      }      
     }
 
     // count에 따라 strInfo에 문자열 할당
@@ -209,6 +134,60 @@ int main()
 
     printf("\n");
     count = 0;
+  }
+  return 0;
+}
+
+
+void initLotto(byte *arr, int nSize)
+{
+  byte i = 0;
+  byte tmp = 0;
+  byte existValue = 0;
+  while (i < LOTTO_COUNT)
+  {
+    tmp = rand() % MAX_LOTTO_VALUE + 1;
+    existValue = findInArray(arr, (int)i, tmp);
+    
+    // 플래그 변수: existValue의 값이 0이면 배열에 현재 생성한 랜덤값이 존재하지 않으므로
+    // 배열에 현재 생성한 랜덤값을 저장한다.
+    if (!existValue)
+    {
+      arr[i] = tmp;
+      ++i;
+    }
+    // 다시 플래그 변수를 0으로 초기화한다.
+    existValue = 0;
+  }
+}
+
+void sortArray(byte *arr, int nSize)
+{  
+  // 가장 기본적인 Sequential Sort Algorithm을 이용해 Ascending Sort를 한다.
+  for (byte i = 0; i < LOTTO_COUNT - 1; i++)
+  {
+    for (byte j = i + 1; j < LOTTO_COUNT; j++)
+    {
+      if (arr[i] > arr[j])
+        swap(&arr[j], &arr[i]);            
+    }
+  }
+}
+
+void swap(byte *a, byte *b)
+{
+  byte tmp;
+  tmp = *a;
+  *a = *b;
+  *b = tmp;
+}
+
+byte findInArray(byte *arr, int nSize, byte toFind)
+{
+  for(byte i=0; i<nSize; i++)
+  {
+    if ( arr[i] == toFind )
+      return 1;
   }
 
   return 0;
