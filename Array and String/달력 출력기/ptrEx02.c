@@ -50,7 +50,7 @@ int main()
   }
 
   // 달력은 맥시멈 6행, 7열 
-  // 0열이 일요일임, 
+  // 0행이 일요일임, 
   int start_dow = days%DAYS_OF_WEEK + 1;     // 전달 마지막 요일 + 1 요일에서 시작
   int end_day = day[month-1];     // 그달의 마지막 일자를 배열에서 구함
   int dom = 1;                    // 1로 그달의 표시할 날짜 초기화
